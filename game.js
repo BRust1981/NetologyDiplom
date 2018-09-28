@@ -41,8 +41,8 @@ class Vector {
 class Actor {
 	constructor (pos = new Vector (0, 0), 
 				 size = new Vector (1, 1), 
-				 speed = new Vector (0, 0),
-				 type
+				 speed = new Vector (0, 0)
+				 //,type = 'actor'
 				) {
 		if (pos instanceof Vector &&
 			size instanceof Vector &&
@@ -89,7 +89,7 @@ class Actor {
 	
 	isIntersect (movingObject) {
 		//console.log(movingObject === this);
-		if (movingObject instanceof Actor || movingObject === undefined){
+		if (movingObject instanceof Actor && movingObject !== undefined){
 			switch (true) {
 				case movingObject === this : return false;
 				//case distance(movingObject.pos, this.pos) < 
@@ -105,10 +105,17 @@ class Actor {
 	}
 }
 
+Object.defineProperty(Actor, "type", {
+  // writable: false, 
+  // configurable :false
+  enumerable: true
+});
+
+
 class Level {
 	constructor (grid, 
 				 actors, 
-				 player, 
+				 //player, 
 				 //height = 0,
 				 //width = 0, 
 				 status = null, 
@@ -116,7 +123,7 @@ class Level {
 				 ) {
 		this.grid = grid;
 		this.actors = actors;
-		this.player = player;
+		//this.player = player;
 		//this.height = height;
 		//this.width = width;
 		this.status = status;
@@ -133,16 +140,45 @@ class Level {
 
 			this.grid.forEach(subArr => {
 			  maxWidth = Math.max(subArr.length, maxWidth);
-			})
+			});
 			return maxWidth;
 		}
+	}
+	
+	get player() {
+		this.actors.forEach(curActor => {
+				
+				if(curActor.type === 'player') {
+					console.log('2');
+					console.log(curActor);
+					return curActor;
+				}
+			});
 	}
 	
 	isFinished() {
 		return this.status !== null && this.finishDelay < 0 ? true : false;
 	}
-	actorAt (movingActor) {
+	actorAt(movingActor) {
+			
 		if (movingActor instanceof Actor || movingActor === undefined){
+			//console.log(movingActor);
+			//console.log(this.actors);
+			this.actors.forEach(curActor => {
+				
+				if(curActor.isIntersect(movingActor)) {
+					console.log('1');
+					console.log(curActor);
+					return curActor;
+				}
+			});
+			/*
+			if(this.height === 0){
+				//console.log(this.height);
+				console.log(this.actors);
+				return undefined;
+			}
+*/
 		} else {
 			// Если передать аргумент другого типа, то бросает исключение
 			throw new Error('Объект должен быть типа Actor');
@@ -154,7 +190,25 @@ class Level {
 
 
 
+class Player extends Actor {
+	constructor (pos) {
+		super(pos);
+		this.pos = pos;
+		this.size = new Vector (0.8,1.5);
+		this.speed = new Vector (0,0);
+		this.rn = 1;
+		// this.type = 'player';
+	}
+	get type() {
+		return 'player';
+	}
+};
 
+Object.defineProperty(Player, "type", {
+  // writable: false, // запретить удаление "delete user.name"
+  // configurable :false
+  enumerable: true
+});
 
 
 
