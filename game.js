@@ -33,7 +33,8 @@ class Vector {
 		this.x = x;
 		this.y = y;
 	}
-	// Создает и возвращает новый объект типа Vector, координаты которого будут суммой соответствующих координат суммируемых векторов.
+	// Создает и возвращает новый объект типа Vector, 
+	// координаты которого будут суммой соответствующих координат суммируемых векторов.
 	// Принимает один аргумент — вектор, объект Vector
 	plus (addVector) {
 		if(addVector instanceof Vector) {
@@ -107,7 +108,8 @@ class Actor {
 	act () {
 	}
 	
-	// Actor. Метод проверяет, пересекается ли текущий объект с переданным объектом, и если да, возвращает true, иначе – false.
+	// Actor. Метод проверяет, пересекается ли текущий объект с переданным объектом, 
+	// и если да, возвращает true, иначе – false.
 	isIntersect (movingObject) {
 		//console.log(movingObject === this);
 		if (movingObject instanceof Actor && movingObject !== undefined){
@@ -128,27 +130,6 @@ class Actor {
 
 Object.defineProperty(Actor, "type", {
   // writable: false, 
-  // configurable :false
-  enumerable: true
-});
-
-
-class Player extends Actor {
-	constructor (pos = new Vector()) {
-		super();
-		this.pos = pos;
-		this.size = new Vector (0.8,1.5);
-		this.speed = new Vector (0,0);
-		this.rn = 1;
-		// this.type = 'player';
-	}
-	get type() {
-		return 'player';
-	}
-};
-
-Object.defineProperty(Player, "type", {
-  // writable: false, // запретить удаление "delete user.name"
   // configurable :false
   enumerable: true
 });
@@ -211,7 +192,8 @@ class Level {
 		return this.status !== null && this.finishDelay < 0 ? true : false;
 	}
 	
-	// Level. Определяет, расположен ли какой-то другой движущийся объект в переданной позиции, и если да, вернёт этот объект.
+	// Level. Определяет, расположен ли какой-то другой движущийся объект в переданной позиции, 
+	// и если да, вернёт этот объект.
 	actorAt(movingActor) {
 		if (movingActor instanceof Actor || movingActor === undefined){
 			if(this.actors !== undefined) {
@@ -240,7 +222,8 @@ class Level {
 		}
 	}
 	
-	// Level. Аналогично методу actorAt определяет, нет ли препятствия в указанном месте. Также этот метод контролирует выход объекта за границы игрового поля.
+	// Level. Аналогично методу actorAt определяет, нет ли препятствия в указанном месте. 
+	// Также этот метод контролирует выход объекта за границы игрового поля.
 	obstacleAt(objPos, objSize) {
 		if (objPos instanceof Vector && objSize instanceof Vector){
 			switch (true) {
@@ -261,7 +244,8 @@ class Level {
 		}
 	}
 	
-	// Level. Метод удаляет переданный объект с игрового поля. Если такого объекта на игровом поле нет, не делает ничего.
+	// Level. Метод удаляет переданный объект с игрового поля. 
+	// Если такого объекта на игровом поле нет, не делает ничего.
 	removeActor (actor) {
 		if (actor instanceof Actor){
 			let actorIndex = this.actors.indexOf(actor);
@@ -287,7 +271,8 @@ class Level {
 		}
 	}
 	
-	// Level. Один из ключевых методов, определяющий логику игры. Меняет состояние игрового поля при касании игроком каких-либо объектов или препятствий.
+	// Level. Один из ключевых методов, определяющий логику игры. 
+	// Меняет состояние игрового поля при касании игроком каких-либо объектов или препятствий.
 	playerTouched(obstacle, movingObj) {
 		if(this.status === null) {
 			switch(true) {
@@ -313,6 +298,9 @@ class Level {
 	}
 }
 
+//##########################################################################################
+// Парсер уровня
+
 class LevelParser {
 	constructor (dictionary) {
 		if (dictionary !== undefined) {
@@ -322,7 +310,8 @@ class LevelParser {
 		}
 	}
 	
-	// LevelParser. Принимает символ, строка. Возвращает конструктор объекта по его символу, используя словарь. Если в словаре не нашлось ключа с таким символом, вернет undefined.
+	// LevelParser. Принимает символ, строка. Возвращает конструктор объекта по его символу, 
+	// используя словарь. Если в словаре не нашлось ключа с таким символом, вернет undefined.
 	actorFromSymbol (objSym) {
 		if(objSym === undefined || objSym === null || this[objSym] === undefined ) {
 			return undefined;
@@ -332,7 +321,8 @@ class LevelParser {
 	}
 
 	
-	// LevelParser. Аналогично принимает символ, строка. Возвращает строку, соответствующую символу препятствия. Если символу нет соответствующего препятствия, то вернет undefined.
+	// LevelParser. Аналогично принимает символ, строка. Возвращает строку, соответствующую символу препятствия. 
+	// Если символу нет соответствующего препятствия, то вернет undefined.
 	obstacleFromSymbol (objSym) {
 		switch (true) {
 			case objSym === 'x' : return 'wall';
@@ -342,47 +332,211 @@ class LevelParser {
 		}
 	}
 	
-	// LevelParser. Принимает массив строк и преобразует его в массив массивов, в ячейках которого хранится либо строка, соответствующая препятствию, либо undefined.
+	// LevelParser. Принимает массив строк и преобразует его в массив массивов, 
+	// в ячейках которого хранится либо строка, соответствующая препятствию, либо undefined.
 	createGrid (gridData) {
 		let resultGrid = [];
 		for (let str of gridData) {
-			
+			let gridRow = [];
+			for (let alpha of str) {
+				gridRow.push(this.obstacleFromSymbol(alpha));
+			}
+			resultGrid.push(gridRow);
 		}
-	}
-	/*
-	// LevelParser. Принимает массив строк и преобразует его в массив движущихся объектов, используя для их создания классы из словаря.
-	createActors () {
+		return resultGrid;
 	}
 	
-	// LevelParser. Принимает массив строк, создает и возвращает игровое поле, заполненное препятствиями и движущимися объектами, полученными на основе символов и словаря.
-	parse () {
+	// LevelParser. Принимает массив строк и преобразует его в массив движущихся объектов, 
+	// используя для их создания классы из словаря.
+	createActors (gridData) {
+		let resultGrid = [];
+
+		for (let str in gridData) {
+			for (let alpha in gridData[str]) {
+				let actorConstructor = this.actorFromSymbol(gridData[str][alpha]);
+				if( actorConstructor !== undefined && 
+					typeof actorConstructor === 'function' &&
+					(Actor.prototype === actorConstructor.prototype ||
+					 Actor.prototype.isPrototypeOf(actorConstructor.prototype))
+				  ) {
+					let newActor = Object.create(actorConstructor.prototype);
+					newActor.pos = new Vector(Number(alpha), Number(str));	//хммм...
+					resultGrid.push(newActor);
+					//resultGrid.push(new actorConstructor(new Vector(alpha, str)));
+				}
+			}
+			
+		}
+		return resultGrid;
 	}
-	*/
+	
+	// LevelParser. Принимает массив строк, создает и возвращает игровое поле, 
+	// заполненное препятствиями и движущимися объектами, полученными на основе символов и словаря.
+	parse (gridData) {
+		return new Level(this.createGrid(gridData),
+						 this.createActors(gridData)
+						);
+	}
 }
 
+//##########################################################################################
+// Шаровая молния
 
+class Fireball extends Actor {
+	constructor(pos, speed) {
+		super();
+		this.pos = pos;
+		this.size = new Vector(1, 1);
+		this.speed = speed;
+	}
+	get type() {
+		return 'fireball';
+	}
 
+	// Fireball. Создает и возвращает вектор Vector следующей позиции шаровой молнии. 
+	// Это функция времени. И как в школьной задаче, новая позиция — это текущая позиция плюс скорость, 
+	// умноженная на время. И так по каждой из осей.
+	
+	getNextPosition (time = 1) {
+		return new Vector (this.pos.x + this.speed.x * time, this.pos.y + this.speed.y * time);
+	}
+	
+	// Fireball. Обрабатывает столкновение молнии с препятствием. Не принимает аргументов. 
+	// Ничего не возвращает.
+	handleObstacle() {
+		this.speed.x *= -1;
+		this.speed.y *= -1;
+	}
+	
+	// Fireball. Обновляет состояние движущегося объекта.
+	act (time, curLevel) {
+		let nextPosition = this.getNextPosition(time);
+		if(curLevel.obstacleAt(nextPosition, this.size) === undefined) {
+			this.pos = nextPosition;
+		} else {
+			this.handleObstacle();
+		}
+	}
+}
 
+//##########################################################################################
+// Горизонтальная шаровая молния
 
+class HorizontalFireball extends Fireball {
+	constructor(pos) {
+		super();
+		this.pos = pos;
+		//this.size = new Vector(1, 1);
+		this.speed = new Vector(2, 0);
+	}
+}
 
+//##########################################################################################
+// Вертикальная шаровая молния
 
+class VerticalFireball extends Fireball {
+	constructor(pos) {
+		super();
+		this.pos = pos;
+		//this.size = new Vector(1, 1);
+		this.speed = new Vector(0, 2);
+	}
+}
 
+//##########################################################################################
+// Огненный дождь
 
+class FireRain extends Fireball {
+	constructor(pos) {
+		super();
+		this.pos = pos;
+		this.initPos = pos;
+		//this.size = new Vector(1, 1);
+		this.speed = new Vector(0, 3);
+	}
+	handleObstacle() {
+		this.pos = this.initPos;
+	}
+}
 
+//##########################################################################################
+// Монета
 
+class Coin extends Actor {
+	constructor(pos) {
+		super();
+		if(pos !== undefined) {
+			this.realpos = pos;
+			//this.pos = new Vector(pos.x + 0.2, pos.y + 0.1);
+			this.pos.x = this.realpos.x + 0.2;
+			this.pos.y = this.realpos.y + 0.1;
+		}
+		
+		if(this.pos !== undefined && this.initpos === undefined) {
+			this.initpos = this.pos;
+		}
+		
+		this.size = new Vector(0.6, 0.6);
+		this.speed = new Vector(0, 3);
+		this.springSpeed = 8;
+		this.springDist = 0.07;
+		this.spring = Math.random() * 2 * Math.PI;
+	}
+	get type() {
+		return 'coin';
+	}
+	
+	updateSpring (time = 1) {
+		//console.log(this.spring);
+		this.spring += this.springSpeed * time;
+		//console.log(this.spring);
+	}
+	
+	getSpringVector () {
+		return new Vector(0, (Math.sin(this.spring) * this.springDist));
+		//return new Vector(0, Math.abs(Math.sin(this.spring) * this.springDist));
+		//return new Vector(0, +(Math.sin(this.spring) * this.springDist).toFixed(4));
+	}
+	
+	getNextPosition (time = 1) {
+		this.updateSpring(time);
+		let newVector = this.getSpringVector();
+		//console.log('this.pos', this.pos);
+		//console.log('newVector', newVector);
+		return new Vector (this.pos.x, this.initpos.y + newVector.y);
+	}
+	
+	act (time) {
+		this.pos = this.getNextPosition(time);
+	}
+}
 
+//##########################################################################################
+// Игрок
 
+class Player extends Actor {
+	constructor (pos) {
+		
+		super();
+		if(pos !== undefined) {
+			this.pos = pos;
+			//this.pos = new Vector(pos.x + 0.2, pos.y + 0.1);
+			//this.pos.x += 0.2; 
+			this.pos.y += -0.5;
+		}
+		this.size = new Vector (0.8,1.5);
+		this.speed = new Vector (0,0);
+		this.rn = 1;
+		// this.type = 'player';
+	}
+	get type() {
+		return 'player';
+	}
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
+Object.defineProperty(Player, "type", {
+  // writable: false, // запретить удаление "delete user.name"
+  // configurable :false
+  enumerable: true
+});
 

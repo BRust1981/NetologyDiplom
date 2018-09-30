@@ -157,10 +157,17 @@ describe('Класс Coin', () => {
       const coin = new Coin(position);
       const realPosition = coin.pos;
       
+			//console.log('realPosition', realPosition);
+
       coin.pos = coin.getNextPosition();
 
       const newPosition = coin.getNextPosition();
+
+			//console.log('newPosition', newPosition);
+
       const springVector = coin.getSpringVector();
+
+			//console.log('springVector', springVector);
 
       expect(newPosition).to.eql(realPosition.plus(springVector));
     });
