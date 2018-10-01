@@ -128,11 +128,11 @@ class Actor {
 	}
 }
 
-Object.defineProperty(Actor, "type", {
-  // writable: false, 
-  // configurable :false
-  enumerable: true
-});
+// Object.defineProperty(Actor, "type", {
+  // // writable: false, 
+  // // configurable :false
+  // enumerable: true
+// });
 
 
 //##########################################################################################
@@ -533,21 +533,47 @@ class Player extends Actor {
 		return 'player';
 	}
 };
-
+/*
 Object.defineProperty(Player, "type", {
   // writable: false, // запретить удаление "delete user.name"
   // configurable :false
   enumerable: true
 });
+*/
+const actorDict = {
+	  '@': Player,
+	  '=': HorizontalFireball,
+	  'o': Coin,
+	  '|': VerticalFireball,
+	  'v': FireRain
+	};
+const parser = new LevelParser(actorDict);
 
 
+loadLevels()
+	.then(function(levelJSON) {
+		//console.log(JSON.parse(levelJSON));
+		// for (let lvl of JSON.parse(levelJSON)) {
+			// console.log(lvl);
+		// }
+
+		//console.log(parser);
+
+		runGame(JSON.parse(levelJSON), parser, DOMDisplay)
+			.then(() => alert('Вы выиграли приз!'));
+	});
+
+
+
+
+/*
 
 const schema = [
   '                               o      ',
   '                         o  xxxxxx    ',
-  '    =                    xx           ',
-  '       o             xxx!             ',
-  '    x!xxx      xx!xx               o  ',
+  '    =              |     xx       |   ',
+  '       o v          xxxx!  v          ',
+  '    x!xxx      xx!x                o  ',
   ' @         xx           o    xx!!xxx!!',
   'xxx!          xx!xxx xxxx             ',
   '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
@@ -561,7 +587,7 @@ const actorDict = {
 }
 const parser = new LevelParser(actorDict);
 const level = parser.parse(schema);
-DOMDisplay(document.body, level);
+//DOMDisplay(document.body, level);
 runLevel(level, DOMDisplay);
-
+*/
 
