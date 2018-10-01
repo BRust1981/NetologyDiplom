@@ -540,3 +540,28 @@ Object.defineProperty(Player, "type", {
   enumerable: true
 });
 
+
+
+const schema = [
+  '                               o      ',
+  '                         o  xxxxxx    ',
+  '    =                    xx           ',
+  '       o             xxx!             ',
+  '    x!xxx      xx!xx               o  ',
+  ' @         xx           o    xx!!xxx!!',
+  'xxx!          xx!xxx xxxx             ',
+  '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+];
+const actorDict = {
+  '@': Player,
+  '=': HorizontalFireball,
+  'o': Coin,
+  '|': VerticalFireball,
+  'v': FireRain
+}
+const parser = new LevelParser(actorDict);
+const level = parser.parse(schema);
+DOMDisplay(document.body, level);
+runLevel(level, DOMDisplay);
+
+
