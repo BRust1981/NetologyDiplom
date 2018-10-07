@@ -270,6 +270,7 @@ describe('Класс Level', () => {
         Array(4),
         Array(4).fill('wall')
       ];
+
       const level = new Level(grid);
       const position = new Vector(2.1, 1.5);
       const size = new Vector(0.8, 1.5);

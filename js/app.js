@@ -163,6 +163,7 @@ function runLevel(level, Display) {
   return new Promise(done => {
     var arrows = trackKeys(arrowCodes);
     var display = new Display(document.body, level);
+	
     runAnimation(step => {
       level.act(step, arrows);
       display.drawFrame(step);
@@ -172,6 +173,7 @@ function runLevel(level, Display) {
         return false;
       }
     });
+	
   });
 }
 
