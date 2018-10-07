@@ -208,7 +208,8 @@ class Level {
 	// Level. Метод удаляет переданный объект с игрового поля. 
 	// Если такого объекта на игровом поле нет, не делает ничего.
 	removeActor (actor) {
-		if (actor instanceof Actor){
+		if (Actor.isPrototypeOf(actor))
+		{
 			let actorIndex = this.actors.indexOf(actor);
 			this.actors.splice(actorIndex, 1);
 		} else {
@@ -470,6 +471,7 @@ class Player extends Actor {
 	}
 };
 
+
 loadLevels()
 	.then(function(levelJSON) {
 		const actorDict = {
@@ -480,8 +482,9 @@ loadLevels()
 			  'v': FireRain
 			};
 		const parser = new LevelParser(actorDict);
-
+		
 		runGame(JSON.parse(levelJSON), parser, DOMDisplay)
 			.then(() => alert('Вы выиграли приз!'));
 	});
+
 

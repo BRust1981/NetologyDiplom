@@ -41,6 +41,7 @@ class DOMDisplay {
     this.actorMap = new Map();
     this.wrap.appendChild(this.drawBackground());
     this.actorLayer = this.wrap.appendChild(this.drawActors());
+	console.log(this.actorLayer);
     this.drawFrame();
   }
 
