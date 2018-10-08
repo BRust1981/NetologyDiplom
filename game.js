@@ -208,8 +208,7 @@ class Level {
 	// Level. Метод удаляет переданный объект с игрового поля. 
 	// Если такого объекта на игровом поле нет, не делает ничего.
 	removeActor (actor) {
-		if (Actor.isPrototypeOf(actor))
-		{
+		if (Actor.prototype.isPrototypeOf(actor)){
 			let actorIndex = this.actors.indexOf(actor);
 			this.actors.splice(actorIndex, 1);
 		} else {
