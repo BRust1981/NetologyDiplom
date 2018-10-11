@@ -313,7 +313,7 @@ class LevelParser {
 						 Actor.prototype.isPrototypeOf(actorConstructor.prototype))
 					  ) {
 						let newActor = Object.create(actorConstructor.prototype);
-						newActor.pos = new Vector(Number(index2), Number(index));	//хммм...
+						newActor.pos = new Vector(index2, index);
 						resultGrid.push(newActor);
 					}
 				});
