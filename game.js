@@ -123,23 +123,22 @@ class Actor {
 // Игровое поле
 
 class Level {
-	constructor (grid, 
-				 actors = [], 
-				 status = null, 
-				 finishDelay = 1
+	constructor (grid = [], 
+				 actors = []
 				 ) {
 		this.grid = grid;
 		this.actors = actors;
-		this.status = status;
-		this.finishDelay = finishDelay;
+		this.status = null;
+		this.finishDelay = 1;
+		
 	}
-	get height() {
-		return this.grid == undefined ? 0 : this.grid.length;
-	}
-	get width() {
-		if(this.grid == undefined) {
-			return 0;
-		} else {
+	 get height() {
+		 return this.grid == undefined ? 0 : this.grid.length;
+	 }
+	 get width() {
+		 if(this.grid == undefined) {
+			 return 0;
+		 } else {
 			let maxWidth = 0;
 
 			this.grid.forEach(subArr => {
@@ -149,11 +148,11 @@ class Level {
 		}
 	}
 	
-	get player() {
-		return this.actors.find(elem => {
-			return elem.type === 'player';
-		});
-	}
+	 get player() {
+		 return this.actors.find(elem => {
+			 return elem.type === 'player';
+		 });
+	 }
 	
 	// Level. Определяет, завершен ли уровень. Не принимает аргументов.
 	isFinished() {
@@ -312,9 +311,7 @@ class LevelParser {
 						(Actor.prototype === actorConstructor.prototype ||
 						 Actor.prototype.isPrototypeOf(actorConstructor.prototype))
 					  ) {
-						let newActor = Object.create(actorConstructor.prototype);
-						newActor.pos = new Vector(index2, index);
-						resultGrid.push(newActor);
+						resultGrid.push(new actorConstructor(new Vector(index2, index)));
 					}
 				});
 			});
@@ -401,7 +398,7 @@ class FireRain extends Fireball {
 		super();
 		this.pos = pos;
 		this.initPos = pos;
-		this.speed = new Vector(0, 3);
+		this.speed = new Vector(0, 1);
 	}
 	handleObstacle() {
 		this.pos = this.initPos;
@@ -487,5 +484,6 @@ loadLevels()
 		runGame(JSON.parse(levelJSON), parser, DOMDisplay)
 			.then(() => alert('Вы выиграли приз!'));
 	});
+
 
 
