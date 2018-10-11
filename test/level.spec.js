@@ -332,6 +332,7 @@ describe('Класс Level', () => {
   describe('Метод removeActor', () => {
     it('Удаляет переданный движущийся объект', () => {
       const level = new Level(undefined, [ mushroom, giftSmall ]);
+	
 
       level.removeActor(mushroom);
 

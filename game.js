@@ -5,8 +5,10 @@
 
 class Vector {
 	constructor (x = 0, y = 0) {
-		this.x = x;
-		this.y = y;
+		if(typeof x === 'number' && isFinite(x) && typeof y === 'number' && isFinite(y)) {
+			this.x = x;
+			this.y = y;
+		}
 	}
 	// Создает и возвращает новый объект типа Vector, 
 	// координаты которого будут суммой соответствующих координат суммируемых векторов.
@@ -302,20 +304,20 @@ class LevelParser {
 		if(this.dictionary === undefined) {
 			return [];
 		} else {
-			for (let str in gridData) {
-				for (let alpha in gridData[str]) {
-					let actorConstructor = this.actorFromSymbol(gridData[str][alpha]);
+			gridData.forEach((el, index) => {
+				[...el].forEach((el2, index2) => {
+					let actorConstructor = this.actorFromSymbol(gridData[index][index2]);
 					if( actorConstructor !== undefined && 
 						typeof actorConstructor === 'function' &&
 						(Actor.prototype === actorConstructor.prototype ||
 						 Actor.prototype.isPrototypeOf(actorConstructor.prototype))
 					  ) {
 						let newActor = Object.create(actorConstructor.prototype);
-						newActor.pos = new Vector(Number(alpha), Number(str));	//хммм...
+						newActor.pos = new Vector(Number(index2), Number(index));	//хммм...
 						resultGrid.push(newActor);
 					}
-				}
-			}
+				});
+			});
 			return resultGrid;
 		}
 	}
