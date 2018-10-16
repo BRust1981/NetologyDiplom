@@ -83,34 +83,15 @@ class Actor {
 	act () {
 	}
 
-	spaceXY (pos, size) {
-		for (let j = Math.trunc(pos.y); j < Math.ceil(pos.y + size.y); j++) {
-			for(let i = Math.trunc(pos.x); i < Math.ceil(pos.x + size.x); i++) {
-				if(this.grid[j][i] !== undefined) {
-					return this.grid[j][i];
-				}
-			}
-		}
-		return undefined;
-	}
-
 	// Actor. Метод проверяет, пересекается ли текущий объект с переданным объектом, 
 	// и если да, возвращает true, иначе – false.
 	isIntersect (movingObject) {
 		if (movingObject instanceof Actor && movingObject !== undefined){
 			if(movingObject === this) {
 				return false;
-			} else if ((movingObject.left > this.left && movingObject.left < this.right
-					   || movingObject.right > this.left && movingObject.left < this.right
-					   || movingObject.left === this.left && movingObject.right === this.right
-					   ) &&
-					   (movingObject.top > this.top && movingObject.top < this.bottom
-					   || movingObject.bottom > this.top && movingObject.bottom < this.bottom
-					   || movingObject.bottom === this.bottom && movingObject.top === this.top 
-					   )) {
-				return true;
 			} else {
-				return false;
+				return this.left < movingObject.right && this.right > movingObject.left && 
+					   this.top < movingObject.bottom && this.bottom > movingObject.top;
 			}
 		} else {
 			// Если передать аргумент другого типа, то бросает исключение
@@ -398,7 +379,7 @@ class FireRain extends Fireball {
 		super();
 		this.pos = pos;
 		this.initPos = pos;
-		this.speed = new Vector(0, 1);
+		this.speed = new Vector(0, 3);
 	}
 	handleObstacle() {
 		this.pos = this.initPos;
