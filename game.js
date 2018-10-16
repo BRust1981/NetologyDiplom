@@ -90,8 +90,19 @@ class Actor {
 			if(movingObject === this) {
 				return false;
 			} else {
+<<<<<<< HEAD
 				return this.left < movingObject.right && this.right > movingObject.left && 
 					   this.top < movingObject.bottom && this.bottom > movingObject.top;
+=======
+				return ((this.left > movingObject.left && this.left < movingObject.right
+					   || this.right > movingObject.left && this.left < movingObject.right
+					   || this.left === movingObject.left && this.right === movingObject.right
+					   ) &&
+					   (this.top > movingObject.top && this.top < movingObject.bottom
+					   || this.bottom > movingObject.top && this.bottom < movingObject.bottom
+					   || this.bottom === movingObject.bottom && this.top === movingObject.top 
+					   ));
+>>>>>>> adf0ece4c29a9f6c1910489a30f7a9cb94054761
 			}
 		} else {
 			// Если передать аргумент другого типа, то бросает исключение
